@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ro">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Smart Traffic System</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        background: #222;
+        color: #fff;
+        padding: 20px;
+      }
+      #status {
+        color: yellow;
+      }
+      #log {
+        margin-top: 20px;
+        font-family: monospace;
+        color: #0f0;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🚦 Traffic Control Interface</h1>
+    <p>Connection Status: <span id="status">Disconnected...</span></p>
+    <label for="north">North Lane:</label>
+    <textarea id="north" cols="8" rows="1"></textarea>
+    <label for="east">East Lane:</label>
+    <textarea id="east" cols="8" rows="1"></textarea>
+    <label for="south">South Lane:</label>
+    <textarea id="south" cols="8" rows="1"></textarea>
+    <label for="west">West Lane:</label>
+    <textarea id="west" cols="8" rows="1"></textarea>
+    <button id="updateBtn">Update Lanes</button>
+
+    <script>
+      const ws = new WebSocket("ws://127.0.0.1:8000/ws");
+
+      ws.onopen = function () {
+        document.getElementById("status").innerText = "Connected ✅";
+        document.getElementById("status").style.color = "lightgreen";
+      };
+
+      ws.onmessage = function (event) {
+        const data = JSON.parse(event.data);
+
+        // document.getElementById("log").innerText = JSON.stringify(
+        //   data,
+        //   null,
+        //   2
+        // );
+      };
+
+      ws.onclose = function () {
+        document.getElementById("status").innerText = "Disconnected ❌";
+        document.getElementById("status").style.color = "red";
+      };
+    </script>
+  </body>
+</html>
